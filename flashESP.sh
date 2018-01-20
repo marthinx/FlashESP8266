@@ -29,14 +29,19 @@
    fi
    
    # get hardware info
-   platform='unknown'
-   unamestr=`uname`
-   if [[ $platform == 'linux' ]]; then
-       lsusb
-   elif [[ $platform == 'freebsd' ]]; then
-       ioreg -p IOUSB -l -w 0
-   fi
-  
+   unameOut="$(uname -s)"
+   case "${unameOut}" in
+       Linux*)     machine=Linux
+                   lsusb;;
+       Darwin*)    machine=Mac
+                     ioreg -p IOUSB -l -w 0;;
+       CYGWIN*)    machine=Cygwin;;
+       MINGW*)     machine=MinGw;;
+       *)          machine="UNKNOWN:${unameOut}"
+   esac
+   echo ${machine}
+   
+ 
   
    
    read -e -p "serial device, (USB2serial devices: $(ls /dev/ttyUSB*)):" -i "/dev/ttyUSB0" serdev
