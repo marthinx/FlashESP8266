@@ -28,7 +28,16 @@
            echo "using esptool $esptoolbin"
    fi
    
-   lsusb
+   # get hardware info
+   platform='unknown'
+   unamestr=`uname`
+   if [[ $platform == 'linux' ]]; then
+       lsusb
+   elif [[ $platform == 'freebsd' ]]; then
+       ioreg -p IOUSB -l -w 0
+   fi
+  
+  
    
    read -e -p "serial device, (USB2serial devices: $(ls /dev/ttyUSB*)):" -i "/dev/ttyUSB0" serdev
    if [ ! -r "$serdev" ] ; then
