@@ -4,6 +4,10 @@
    do
            selectst="$i $i off $selectst"
    done
+   
+   # esptool installieren
+   git clone https://github.com/espressif/esptool.git
+   
    # check for esptool
    esptoolbin=$(which esptool)
    if [ ! -x "$esptoolbin" ] ; then
@@ -23,6 +27,9 @@
    else
            echo "using esptool $esptoolbin"
    fi
+   
+   lsusb
+   
    read -e -p "serial device, (USB2serial devices: $(ls /dev/ttyUSB*)):" -i "/dev/ttyUSB0" serdev
    if [ ! -r "$serdev" ] ; then
            echo "device '$serdev' does not exist"
